@@ -4,7 +4,7 @@
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
 
-public  class Flight
+public abstract  class Flight
 {
     private string flightNumber;
     private string origin;
@@ -25,10 +25,8 @@ public  class Flight
         ExpectedTime= expectedTime;
         Status= status;
     }
-    public abstract double CalculateFees()
-    {
-
-    }
+    public abstract double CalculateFees();
+    
     
     public override string ToString()
     {
@@ -52,7 +50,7 @@ public class NORMFlight : Flight
 
     public override double CalculateFees()
     {
-        return
+        return 1;
     }
     public override string ToString()
     {
@@ -67,8 +65,8 @@ public class CFFTFlight : Flight
     {
         RequestFee= requestFee;
     }
-    public override double CalculateFees() { 
-
+    public override double CalculateFees() {
+        return 1;
     }
     public override string ToString()
     {
@@ -86,7 +84,7 @@ public class LWTTFlight : Flight
     }
     public override double CalculateFees()
     {
-
+        return 1;
     }
     public override string ToString()
     {
@@ -104,7 +102,7 @@ public class DDJBFlight : Flight
     }
     public override double CalculateFees()
     {
-
+        return 1;
     }
     public override string ToString()
     {
@@ -128,16 +126,16 @@ public class AirLine
     public string Name { get;set; }
     public bool AddFlight(Flight flights)
     {
-
+        return false;
     }
 
     public double CalculateFees()
     {
-        return 
+        return 1;
     }
     public bool RemoveFlight()
     {
-        return 
+        return false;
     }
     
     
@@ -179,7 +177,7 @@ public class BoardingGate
 
     public double CalculateFees()
     {
-        return 
+        return 1;
     }
     public override string ToString()
     {
@@ -204,15 +202,17 @@ public class Terminal
 
     public bool AddAirLine(AirLine airLine)
     {
-        return
+        return false;
     }
-    public bool AddBoardingGate(BoardingGate boardingGate) { 
-        return 
+    public bool AddBoardingGate(BoardingGate boardingGate) {
+        return false;
     }
-    public AirLine GetAirLineFromFlight(Flight flight)
-    {
-        return 
-    }
+   /// public AirLine GetAirLineFromFlight(Flight flight)
+    ///{
+     ///   return 
+    ///
+    /// 
+    /// }
     public void PrintAirLineFees()
     {
 
