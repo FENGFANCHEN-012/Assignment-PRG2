@@ -26,9 +26,9 @@ namespace Assignment_PRG2
             Dictionary<string, AirLine> airdic = new Dictionary<string, AirLine>();
             Dictionary<string, Flight> flightdic = new Dictionary<string, Flight>();
             Dictionary<string, BoardingGate> gatedic = new Dictionary<string, BoardingGate>();
-            string gate = "C:\\Users\\johny\\source\\repos\\Assignment PRG2\\Assignment PRG2\\data\\boardinggates.csv";
-            string airline = "C:\\Users\\johny\\source\\repos\\Assignment PRG2\\Assignment PRG2\\data\\airlines.csv";
-            string flight = "C:\\Users\\johny\\source\\repos\\Assignment PRG2\\Assignment PRG2\\data\\flights.csv";
+            string gate = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
+            string airline = "C:\\Users\\Samue\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
+            string flight = "C:\\Users\\Samue\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
             List<string> flightdata = new List<string>(File.ReadLines(flight));
             List<string> airdata = new List<string>(File.ReadLines(airline));
             List<string> gatedata = new List<string>(File.ReadLines(gate));
@@ -47,21 +47,8 @@ namespace Assignment_PRG2
 
                 }
             }
-
-            void LoadFlight()
+            void LoadGate()
             {
-                foreach (string i in flightdata)  /// load flight file
-                {
-                    if (flightdata.IndexOf(i) == 0)
-                    {
-                        continue;
-                    }
-                    List<string> data = new List<string>(i.Split(","));
-                }
-            }
-            void LoadGate() {
-
-
                 foreach (string i in gatedata.Skip(1))
                 {
 
@@ -108,115 +95,90 @@ namespace Assignment_PRG2
 
 
             // feature 3
-            void Command() {
+            void Command()
+            {
                 if (answer == "1")
                 {
                     Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
                     foreach (var i in flightdic)
                     {
-            void Command() {
-                while (true) {
-                    if (answer == "1")
-                    {
-                        Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
-                        foreach (var i in flightdic)
+                        void Command()
                         {
-
-                        foreach (var w in airdic)
-                        {
-                            if (w.Value.Code == i.Value.FlightNumber.Substring(0, 2))
+                            while (true)
                             {
-                                Console.WriteLine($"{i.Value.FlightNumber,-30}{w.Value.Name,-30}{i.Value.Origin,-27}{i.Value.Destination,-30}{i.Value.ExpectedTime,-15}");
-                            }
-                            foreach (var w in airdic)
-                            {
-                                if (w.Value.Code == i.Value.FlightNumber.Substring(0, 2))
+                                if (answer == "1")
                                 {
-                                    Console.WriteLine($"{i.Value.FlightNumber,-30}{w.Value.Name,-30}{i.Value.Origin,-27}{i.Value.Destination,-30}{i.Value.ExpectedTime,-15}");
+                                    Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
+                                    foreach (var i in flightdic)
+                                    {
+
+                                        foreach (var w in airdic)
+                                        {
+                                            if (w.Value.Code == i.Value.FlightNumber.Substring(0, 2))
+                                            {
+                                                Console.WriteLine($"{i.Value.FlightNumber,-30}{w.Value.Name,-30}{i.Value.Origin,-27}{i.Value.Destination,-30}{i.Value.ExpectedTime,-15}");
+                                            }
+                                        }
+                                    }
+                                    /// create the boardgate object
+
+                                    foreach (string i in gatedata.Skip(1))
+                                    {
+
+                                        List<string> data = new List<string>(i.Split(","));
+                                    }
+                                }
+                            }
+                            /// create the boardgate object
+
+
+
+
+                        }
+
+
+                        /// Testing execution of files
+
+                        /// Testing execution of files
+
+                        //feature 4
+                        if (answer == "2")
+                        {
+                            Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
+                            foreach (var x in gatedic.Values)
+                            {
+                                Console.WriteLine($"{x.GetName,-10}{x.SupportsDDJB,-10}{x.SupportsCFFT,-10}{x.SupportsLWTT,-10}");
+                            }
+
+                            //feature 4
+                            if (answer == "2")
+                            {
+                                Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
+                                foreach (var x in gatedic.Values)
+                                {
+                                    Console.WriteLine($"{x.GetName,-10} {x.SupportsDDJB,-10} {x.SupportsCFFT,-10} {x.SupportsLWTT,-10}");
                                 }
 
-                        }
-                    }
-                }
-                /// create the boardgate object
 
-                foreach (string i in gatedata.Skip(1))
-                {
 
-                    List<string> data = new List<string>(i.Split(","));
+
+
+
                             }
+
                         }
+
+                        LoadAirLine();
+                        LoadFlight();
+                        LoadGate();
+                        Command();
+
+                        Console.WriteLine($"Loaded airlines: {airdic.Count}");
+                        Console.WriteLine($"Loaded flights: {flightdic.Count}");
                     }
-                    /// create the boardgate object
-
-                 
-
-
                 }
-
-
-                /// Testing execution of files
-
-                    /// Testing execution of files
-
-                //feature 4
-                if (answer == "2") {
-                    Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
-                    foreach (var i in gatedic.Values)
-                    {
-                        Console.WriteLine($"{i.GetName,-10}{i.SupportsDDJB,-10}{i.SupportsCFFT,-10}{i.SupportsLWTT,-10}");
-                    }
-
-                    //feature 4
-                    if (answer == "2") {
-                        Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
-                        foreach (var i in gatedic.Values)
-                        {
-                            Console.WriteLine($"{i.GetName,-10}{i.SupportsDDJB,-10}{i.SupportsCFFT,-10}{i.SupportsLWTT,-10}");
-                        }
-
-
-
-
-
-
-                }
-                if (answer == "3") { }
-                foreach (var w in gatedic)
-                {
-                    }
-                    if (answer == "3") { }
-                    foreach (var w in gatedic)
-                    {
-
-
-                    foreach (var i in flightdic)
-                    {
-                        foreach (var i in flightdic)
-                        {
-
-                        if (i.Value.Status == w.)
-                        {
-                            if (i.Value.Status == w.)
-                            {
-
-                        }
-                    } }
-
             }
-                            }
-                        } }
-
-                }
-
-            }
-
-            LoadAirLine();
-            LoadFlight();
-            LoadGate();
-            Command();
-
-            Console.WriteLine($"Loaded airlines: {airdic.Count}");
-            Console.WriteLine($"Loaded flights: {flightdic.Count}");
-        } } }
+        }
+    }
+}
             
