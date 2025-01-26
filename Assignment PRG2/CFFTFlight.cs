@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 
 
+//==========================================================
+// Student Number : S12345678
+// Student Name   : Samuel Tay
+// Partner Name   : CHEN FENGFAN
+//==========================================================
+
+
 namespace Assignment_PRG2
 {
    public class CFFTFlight : Flight
@@ -14,7 +21,7 @@ namespace Assignment_PRG2
         public double RequestFee { set; get; }
         public CFFTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status) : base(flightNumber, origin, destination, expectedTime, status)
         {
-            RequestFee = requestFee;
+            RequestFee = requestFee;    
         }
         public override double CalculateFees()
         {

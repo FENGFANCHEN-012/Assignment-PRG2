@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
 //==========================================================
 // Student Number : S12345678
-// Student Name   : Michael Jordan
-// Partner Name   : Scottie Pippen
+// Student Name   : Samuel Tay
+// Partner Name   : CHEN FENGFAN
 //==========================================================
-
-
 
 
 namespace Assignment_PRG2

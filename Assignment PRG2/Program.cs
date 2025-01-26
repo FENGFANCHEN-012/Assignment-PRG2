@@ -20,15 +20,14 @@ namespace Assignment_PRG2
 
 
 
-            Console.WriteLine("=============================================\r\nWelcome to Changi Airport Terminal 5\r\n=============================================\r\n1. List All Flights\r\n2. List Boarding Gates\r\n3. Assign a Boarding Gate to a Flight\r\n4. Create Flight\r\n5. Display Airline Flights\r\n6. Modify Flight Details\r\n7. Display Flight Schedule\r\n0. Exit\r\nPlease select your option:");
-            string answer = Console.ReadLine()!;
+
 
             Dictionary<string, AirLine> airdic = new Dictionary<string, AirLine>();
             Dictionary<string, Flight> flightdic = new Dictionary<string, Flight>();
             Dictionary<string, BoardingGate> gatedic = new Dictionary<string, BoardingGate>();
-            string gate = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
-            string airline = "C:\\Users\\Samue\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
-            string flight = "C:\\Users\\Samue\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+            string gate = "C:\\Users\\johny\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
+            string airline = "C:\\Users\\johny\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
+            string flight = "C:\\Users\\johny\\Source\\Repos\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
             List<string> flightdata = new List<string>(File.ReadLines(flight));
             List<string> airdata = new List<string>(File.ReadLines(airline));
             List<string> gatedata = new List<string>(File.ReadLines(gate));
@@ -47,8 +46,10 @@ namespace Assignment_PRG2
 
                 }
             }
-            void LoadGate()
+            void LoadGate()  // load gatefile
+
             {
+
                 foreach (string i in gatedata.Skip(1))
                 {
 
@@ -92,93 +93,95 @@ namespace Assignment_PRG2
 
                 }
             }
+            void Menu()
+            {
+                Console.WriteLine(@"
+=============================================
+Welcome to Changi Airport Terminal 5
+=============================================
+1. List All Flights
+2. List Boarding Gates
+3. Assign a Boarding Gate to a Flight
+4. Create Flight
+5. Display Airline Flights
+6. Modify Flight Details
+7. Display Flight Schedule
+0. Exit
+Please select your option:
+");
+                
+            }
 
 
-            // feature 3
+
             void Command()
             {
-                if (answer == "1")
+                while (true)
+
                 {
-                    Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
-                    foreach (var i in flightdic)
+                    Menu();
+
+                    string answer = Console.ReadLine()!;
+
+
+                    if (answer == "1")   // feature 3
                     {
-                        void Command()
+
+                        Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
+
+                        foreach (var i in flightdic)
                         {
-                            while (true)
+
+                            foreach (var w in airdic)
                             {
-                                if (answer == "1")
+                                if (w.Value.Code == i.Value.FlightNumber.Substring(0, 2))
                                 {
-                                    Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
-                                    foreach (var i in flightdic)
-                                    {
+                                    Console.WriteLine($"{i.Value.FlightNumber,-30}{w.Value.Name,-30}{i.Value.Origin,-27}{i.Value.Destination,-30}{i.Value.ExpectedTime,-15}");
 
-                                        foreach (var w in airdic)
-                                        {
-                                            if (w.Value.Code == i.Value.FlightNumber.Substring(0, 2))
-                                            {
-                                                Console.WriteLine($"{i.Value.FlightNumber,-30}{w.Value.Name,-30}{i.Value.Origin,-27}{i.Value.Destination,-30}{i.Value.ExpectedTime,-15}");
-                                            }
-                                        }
-                                    }
-                                    /// create the boardgate object
-
-                                    foreach (string i in gatedata.Skip(1))
-                                    {
-
-                                        List<string> data = new List<string>(i.Split(","));
-                                    }
                                 }
                             }
-                            /// create the boardgate object
-
-
-
-
                         }
 
 
-                        /// Testing execution of files
 
-                        /// Testing execution of files
 
-                        //feature 4
+
+
+                        //feature 4 
                         if (answer == "2")
                         {
                             Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
                             foreach (var x in gatedic.Values)
                             {
-                                Console.WriteLine($"{x.GetName,-10}{x.SupportsDDJB,-10}{x.SupportsCFFT,-10}{x.SupportsLWTT,-10}");
+                                Console.WriteLine($"{x.GetName,-10} {x.SupportsDDJB,-10} {x.SupportsCFFT,-10} {x.SupportsLWTT,-10}");
                             }
 
-                            //feature 4
-                            if (answer == "2")
-                            {
-                                Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
-                                foreach (var x in gatedic.Values)
-                                {
-                                    Console.WriteLine($"{x.GetName,-10} {x.SupportsDDJB,-10} {x.SupportsCFFT,-10} {x.SupportsLWTT,-10}");
-                                }
 
 
 
 
-
-
-                            }
-
+                        
                         }
 
-                        LoadAirLine();
-                        LoadFlight();
-                        LoadGate();
-                        Command();
 
-                        Console.WriteLine($"Loaded airlines: {airdic.Count}");
-                        Console.WriteLine($"Loaded flights: {flightdic.Count}");
                     }
+
+
+
                 }
+            
             }
+            LoadGate();
+            LoadFlight();
+            LoadAirLine();
+            Command();
         }
     }
 }
+            
+
+        
+
+    
+
             
