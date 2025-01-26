@@ -45,6 +45,7 @@ namespace Assignment_PRG2
                     airdic[data[1]] = new AirLine(data[0], data[1], flightdic);
 
                 }
+                Console.WriteLine("Load AirLine data complete");
             }
             void LoadGate()  // load gatefile
 
@@ -58,6 +59,7 @@ namespace Assignment_PRG2
                     gatedic[data[0]] = new BoardingGate(data[0], Convert.ToBoolean(data[1]), Convert.ToBoolean(data[2]), Convert.ToBoolean(data[3]), null);
 
                 }
+                Console.WriteLine("Load Gate data complete");
 
             }
 
@@ -92,24 +94,24 @@ namespace Assignment_PRG2
 
 
                 }
+                Console.WriteLine("Load Flight data complete");
             }
             void Menu()
             {
-                Console.WriteLine(@"
-=============================================
-Welcome to Changi Airport Terminal 5
-=============================================
-1. List All Flights
-2. List Boarding Gates
-3. Assign a Boarding Gate to a Flight
-4. Create Flight
-5. Display Airline Flights
-6. Modify Flight Details
-7. Display Flight Schedule
-0. Exit
-Please select your option:
-");
                 
+                Console.WriteLine("=============================================");
+                Console.WriteLine("Welcome to Changi Airport Terminal 5");
+                Console.WriteLine("=============================================");
+                Console.WriteLine("1. List All Flights");
+                Console.WriteLine("2. List Boarding Gates");
+                Console.WriteLine("3. Assign a Boarding Gate to a Flight");
+                Console.WriteLine("4. Create Flight");
+                Console.WriteLine("5. Display Airline Flights");
+                Console.WriteLine("6. Modify Flight Details");
+                Console.WriteLine("7. Display Flight Schedule");
+                Console.WriteLine("0. Exit");
+                Console.WriteLine("Please select your option:");
+
             }
 
 
@@ -144,38 +146,39 @@ Please select your option:
 
 
 
+                    }
 
 
-
-                        //feature 4 
-                        if (answer == "2")
+                    //feature 4 
+                    if (answer == "2")
+                    {
+                        Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
+                        foreach (var x in gatedic.Values)
                         {
-                            Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
-                            foreach (var x in gatedic.Values)
-                            {
-                                Console.WriteLine($"{x.GetName,-10} {x.SupportsDDJB,-10} {x.SupportsCFFT,-10} {x.SupportsLWTT,-10}");
-                            }
-
-
-
-
-
-                        
+                            Console.WriteLine($"{x.GetName,-10} {x.SupportsDDJB,-10} {x.SupportsCFFT,-10} {x.SupportsLWTT,-10}");
                         }
+
+
+
+
 
 
                     }
 
 
-
                 }
-            
+
+
+
             }
+
+
             LoadGate();
             LoadFlight();
             LoadAirLine();
             Command();
         }
+
     }
 }
             
