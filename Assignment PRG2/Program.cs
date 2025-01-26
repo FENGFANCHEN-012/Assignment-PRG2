@@ -10,7 +10,6 @@ using System.IO;
 // Partner Name   : Samuel Tay
 //==========================================================
 
-ibvpaorghviwPGBVHOEBHP
 namespace Assignment_PRG2
 {
     class Program
@@ -21,9 +20,8 @@ namespace Assignment_PRG2
 
 
 
-            Console.WriteLine("=============================================\r\nWelcome to Changi Airport Terminal 5\r\n=============================================\r\n1. List All Flights\r\n2. List Boarding Gates\r\n3. Assign a Boarding Gate to a Flight\r\n4. Create Flight\r\n5. Display Airline Flights\r\n6. Modify Flight Details\r\n7. Display Flight Schedule\r\n0. Exit\r\nPlease select your option:\r\n1");
+            Console.WriteLine("=============================================\r\nWelcome to Changi Airport Terminal 5\r\n=============================================\r\n1. List All Flights\r\n2. List Boarding Gates\r\n3. Assign a Boarding Gate to a Flight\r\n4. Create Flight\r\n5. Display Airline Flights\r\n6. Modify Flight Details\r\n7. Display Flight Schedule\r\n0. Exit\r\nPlease select your option:");
             string answer = Console.ReadLine()!;
-            ///// HI world
 
             Dictionary<string, AirLine> airdic = new Dictionary<string, AirLine>();
             Dictionary<string, Flight> flightdic = new Dictionary<string, Flight>();
