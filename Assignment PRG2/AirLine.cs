@@ -23,6 +23,8 @@ namespace Assignment_PRG2
         public string Name { get; set; }
         public bool AddFlight(Flight flights)
         {
+            
+            Flights.Add(name, flights);
             return false;
         }
 

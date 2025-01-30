@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace Assignment_PRG2
 {
-    public abstract class Flight
+    public abstract class Flight : IComparable<Flight>
     {
         private string flightNumber;
         private string origin;
@@ -39,11 +39,16 @@ namespace Assignment_PRG2
         {
             return 1;
         }
-
+        public int CompareTo(Flight other)
+        {
+            return this.ExpectedTime.CompareTo(other.ExpectedTime);
+        }
 
         public override string ToString()
         {
-            return base.ToString();
+            return $"{FlightNumber}\n{Origin}\n{Destination}\n{ExpectedTime}";
+
+
         }
 
     }
