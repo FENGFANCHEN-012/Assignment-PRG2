@@ -29,9 +29,9 @@ namespace Assignment_PRG2
             Dictionary<string, AirLine> airdic = new Dictionary<string, AirLine>();
             Dictionary<string, Flight> flightdic = new Dictionary<string, Flight>();
             Dictionary<string, BoardingGate> gatedic = new Dictionary<string, BoardingGate>();
-            string gate = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
-            string airline = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
-            string flight = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+            string gate = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
+            string airline = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
+            string flight = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
             List<string> flightdata = new List<string>(File.ReadLines(flight));
             List<string> airdata = new List<string>(File.ReadLines(airline));
            
@@ -286,9 +286,8 @@ namespace Assignment_PRG2
                 }
                 Console.Write("Enter Airline Code: ");
 
-                Console.WriteLine("Boarding Gate");
-            string aircode = Console.ReadLine()!;
-               
+                string aircode = Console.ReadLine()!;
+                Console.WriteLine("=============================================\r\nList of Airlines for Changi Airport Terminal 5\r\n=============================================");
                 Console.WriteLine($"{"Flight Number",-25}{"AirLine Name",-25}{"Origin",-20}{"destination",-20}{"Expected Arrival",-20}{"Special Request Code",-15}{"Boarding Gate"}");
                 foreach (var i in flight)
                 {
@@ -334,7 +333,7 @@ namespace Assignment_PRG2
             {
                 List<Flight> sortedFlights = flightdic.Values.ToList();
                 sortedFlights.Sort((f1, f2) => f1.ExpectedTime.CompareTo(f2.ExpectedTime));  // 按预计到达时间排序
-
+                Console.WriteLine("=============================================\r\nFlight Schedule for Changi Airport Terminal 5\r\n=============================================");
                 Console.WriteLine($"{"Flight Number",-20}{"Airline Name",-20}{"Origin",-15}{"Destination",-15}{"Expected Arrival",-20}{"Status",-10}{"Special Code",-10}{"Boarding Gate"}");
 
                 foreach (var flight in sortedFlights)
@@ -359,7 +358,7 @@ namespace Assignment_PRG2
 
             void ModifyFlight(Dictionary<string, AirLine> air, Dictionary<string, Flight> flight,List<string> flightdata,Dictionary<string,BoardingGate> boardgate) {
                 DisplayAirLine(air, flight,flightdata, gatedic);
-                string path = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+                string path = "C:\\Users\\Samue\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
                 Console.Write("Choose an existing Flight to modify or delete:");
                 string choice2 = Console.ReadLine()!;
                 Flight fly = LoopFlight(flight, choice2);
@@ -534,7 +533,7 @@ namespace Assignment_PRG2
                             Console.Write("Enter Special Request Code");
                             string specialRequestCode = Console.ReadLine()!;
 
-                            string filePath = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+                            string filePath = "C:\\Users\\Samue\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
 
 
 
