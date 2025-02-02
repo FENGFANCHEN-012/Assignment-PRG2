@@ -10,54 +10,89 @@ using System.Threading.Tasks;
 // Student Name   : Samuel Tay
 // Partner Name   : CHEN FENGFAN
 //==========================================================
-
-
 namespace Assignment_PRG2
 {
     public class Terminal
     {
         private string terminalName;
         private Dictionary<string, AirLine> airLines;
-        private Dictionary<string, AirLine> flights;
+        private Dictionary<string, Flight> flights;
         private Dictionary<string, BoardingGate> boardingGate;
         private Dictionary<string, double> gateFees;
+
         public string TerminalName { get; set; }
         public Dictionary<string, AirLine> AirLines { get; set; }
-        public Dictionary<string, AirLine> Flights { get; set; }
+        public Dictionary<string, Flight> Flights { get; set; }
         public Dictionary<string, BoardingGate> BoardingGate { get; set; }
         public Dictionary<string, double> GateFees { get; set; }
 
-        public bool AddAirLine(AirLine airLine)
-        {
-            return false;
-        }
-        public bool AddBoardingGate(BoardingGate boardingGate)
-        {
-            return false;
-        }
-        /// public AirLine GetAirLineFromFlight(Flight flight)
-        ///{
-        ///   return 
-        ///}
-        public void PrintAirLineFees()
-        {
-
-        }
-
-        public Terminal(string terminalName)
+        public Terminal(string terminalName, Dictionary<string, AirLine> air, Dictionary<string, Flight> flight, Dictionary<string, BoardingGate> gate, Dictionary<string, double> fee)
         {
             TerminalName = terminalName;
-            AirLines = new Dictionary<string, AirLine>();
-            Flights = new Dictionary<string, AirLine>();
-            BoardingGate = new Dictionary<string, BoardingGate>();
-            GateFees = new Dictionary<string, double>();
+            AirLines = air;
+            Flights = flight;
+            BoardingGate = gate;
+            GateFees = fee;
+        }
+
+        public bool AddAirLine(AirLine airLine)
+        {
+            if (airLine == null)
+            {
+                return false;
+            }
+
+            string airlineCode = airLine.Name;
+            if (AirLines.ContainsKey(airlineCode))
+            {
+                return false;
+            }
+
+            AirLines.Add(airlineCode, airLine);
+            return true;
+        }
+
+        public bool AddBoardingGate(BoardingGate boardingGate)
+        {
+            if (boardingGate == null)
+            {
+                return false;
+            }
+
+            string gateNumber = boardingGate.GetName;
+            if (BoardingGate.ContainsKey(gateNumber))
+            {
+                return false;
+            }
+
+            BoardingGate.Add(gateNumber, boardingGate);
+            return true;
+        }
+
+        public AirLine GetAirLineFromFlight(Flight flight)
+        {
+            if (flight == null)
+            {
+                return null;
+            }
+
+            string airlineCode = flight.FlightNumber;
+            if (AirLines.ContainsKey(airlineCode))
+            {
+                return AirLines[airlineCode];
+            }
+
+            return null;
+        }
+
+        public void PrintAirLineFees()
+        {
+           
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return $"Terminal Name: {TerminalName}, Airlines: {AirLines.Count}, Flights: {Flights.Count}, Boarding Gates: {BoardingGate.Count}";
         }
-
     }
 }
-  

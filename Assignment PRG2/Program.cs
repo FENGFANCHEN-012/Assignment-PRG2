@@ -29,13 +29,17 @@ namespace Assignment_PRG2
             Dictionary<string, AirLine> airdic = new Dictionary<string, AirLine>();
             Dictionary<string, Flight> flightdic = new Dictionary<string, Flight>();
             Dictionary<string, BoardingGate> gatedic = new Dictionary<string, BoardingGate>();
-            string gate = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
-            string airline = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
-            string flight = "C:\\Users\\Samue\\source\\repos\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+            Dictionary<string, double> fees = new Dictionary<string, double>();
+            string gate = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\boardinggates.csv";
+            string airline = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
+            string flight = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
             List<string> flightdata = new List<string>(File.ReadLines(flight));
             List<string> airdata = new List<string>(File.ReadLines(airline));
-           
-            List<string> gatedata = new List<string>(File.ReadLines(gate));
+
+            Terminal terminal5 = new Terminal("terminal5", airdic, flightdic, gatedic, fees);
+
+
+          
            void  FlightType(List<string> flightdata,AirLine air,List<string> info)
             {
                 foreach (string i in flightdata) { 
@@ -71,7 +75,7 @@ namespace Assignment_PRG2
                 }
 
             }
-         
+           
             void PrintFlight()
             {
                 Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
@@ -226,6 +230,8 @@ namespace Assignment_PRG2
                 Console.WriteLine("5. Display Airline Flights");
                 Console.WriteLine("6. Modify Flight Details");
                 Console.WriteLine("7. Display Flight Schedule");
+                Console.WriteLine("8. Assigned all Unassined Flight to gates");
+                Console.WriteLine("9. Caculated fees of each airlines corporation");
                 Console.WriteLine("0. Exit");
                 Console.WriteLine("Please select your option:");
 
@@ -329,10 +335,10 @@ namespace Assignment_PRG2
                 }
               
             }
-            void Schedule(Dictionary<string, Flight> flightdic, Dictionary<string, BoardingGate> gatedic, Dictionary<string, AirLine> airdic)
+            void Schedule(Dictionary<string, Flight> flightdic, Dictionary<string, BoardingGate> gatedic, Dictionary<string, AirLine> airdic,List<string> flightdata)
             {
                 List<Flight> sortedFlights = flightdic.Values.ToList();
-                sortedFlights.Sort((f1, f2) => f1.ExpectedTime.CompareTo(f2.ExpectedTime));  // 按预计到达时间排序
+                sortedFlights.Sort((f1, f2) => f1.ExpectedTime.CompareTo(f2.ExpectedTime));
                 Console.WriteLine("=============================================\r\nFlight Schedule for Changi Airport Terminal 5\r\n=============================================");
                 Console.WriteLine($"{"Flight Number",-20}{"Airline Name",-20}{"Origin",-15}{"Destination",-15}{"Expected Arrival",-20}{"Status",-10}{"Special Code",-10}{"Boarding Gate"}");
 
@@ -340,21 +346,31 @@ namespace Assignment_PRG2
                 {
                     string airlineName = airdic.ContainsKey(flight.FlightNumber.Substring(0, 2)) ? airdic[flight.FlightNumber.Substring(0, 2)].Name : "Unknown";
                     string gateName = "";
-                    string specialCode = flight.Status; // 默认状态
 
-                    foreach (var gate in gatedic)
+                    foreach (var data in flightdata)
                     {
-                        if (gate.Value.Flight != null && gate.Value.Flight.FlightNumber == flight.FlightNumber)
+                        List<string> data2 = new List<string>(data.Split(","));
+                        if (data2[0] == flight.FlightNumber)
                         {
-                            gateName = gate.Value.GetName;
-                            break;
+                            string code = data2[4];
+                            if (data2[4] == "")
+                            {
+                                code = "Unassigned";
+                            }
+                            foreach (var gate in gatedic)
+                            {
+                                if (gate.Value.Flight != null && gate.Value.Flight.FlightNumber == flight.FlightNumber)
+                                {
+                                    gateName = gate.Value.GetName;
+                                    break;
+                                }
+                            }
+
+                            Console.WriteLine($"{flight.FlightNumber,-20}{airlineName,-20}{flight.Origin,-15}{flight.Destination,-15}{flight.ExpectedTime,-20}{flight.Status,-10}{code,-10}{gateName}");
                         }
                     }
-
-                    Console.WriteLine($"{flight.FlightNumber,-20}{airlineName,-20}{flight.Origin,-15}{flight.Destination,-15}{flight.ExpectedTime,-20}{flight.Status,-10}{specialCode,-10}{gateName}");
                 }
             }
-
 
             void ModifyFlight(Dictionary<string, AirLine> air, Dictionary<string, Flight> flight,List<string> flightdata,Dictionary<string,BoardingGate> boardgate) {
                 DisplayAirLine(air, flight,flightdata, gatedic);
@@ -503,95 +519,114 @@ namespace Assignment_PRG2
               
 
             }
-            void CreateFlight(Dictionary<string,Flight> flight, Dictionary<string,AirLine> airline)
+            void CreateFlight(Dictionary<string,Flight> flight, Dictionary<string,AirLine> airline,Terminal terminal)
             {
-                try {
-                    Console.Write("Enter Flight Number:");
-                    string flightNumber = Console.ReadLine()!.ToUpper();
-                    if (airline.ContainsKey(flightNumber.Substring(0, 2)))
+                try
+                { bool w = false;
+                    while (!w)
                     {
-
-
-                        if (flight.ContainsKey(flightNumber))
+                        Console.Write("Enter Flight Number:");
+                        string flightNumber = Console.ReadLine()!.ToUpper();
+                        if (airline.ContainsKey(flightNumber.Substring(0, 2)))
                         {
-                            Console.WriteLine("This Flight Already Exists, Try Create Another one");
-                            return ;
-                        }
-                        else
-                        {  AirLine air  =  airline[flightNumber];
-
-                            Console.Write("Enter Origin:");
-                            string origin = Console.ReadLine()!;
-                            Console.Write("Enter Destination:");
-                            string destination = Console.ReadLine()!;
-                            Console.Write("Enter Expected Departure / Arrival Time(dd / mm / yyyy hh: mm):");
-                            string time = Console.ReadLine()!.Trim().ToUpper();
-                            string expectedTime = Regex.Replace(time, @"\s*(AM|PM)\s*", " $1");
-                            DateTime parsedWithSpace = DateTime.ParseExact(expectedTime, "h:mm tt", CultureInfo.InvariantCulture);
-
-                         
-                            Console.Write("Enter Special Request Code");
-                            string specialRequestCode = Console.ReadLine()!;
-
-                            string filePath = "C:\\Users\\Samue\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
 
 
-
-                            // Handle empty special request code
-                            if (string.IsNullOrWhiteSpace(specialRequestCode))
+                            if (terminal.Flights.ContainsKey(flightNumber))
                             {
-                                specialRequestCode = "";  // Ensure empty value is added correctly in CSV
-                            }
-                            if (!code.Contains(specialRequestCode))
-                            {
-                                Console.WriteLine("Invalid SpecialRequestCode");
+                                Console.WriteLine("This Flight Already Exists, Try Create Another one");
+                                return;
                             }
                             else
+
                             {
-                                string newFlightEntry = $"{flightNumber},{origin},{destination},{expectedTime},{specialRequestCode}";
-                                List<string> list = new List<string> { flightNumber,origin,destination,expectedTime,specialRequestCode };
-                                foreach (var i in airline)
+
+
+                                AirLine air = airline[flightNumber];
+
+                                Console.Write("Enter Origin:");
+                                string origin = Console.ReadLine()!;
+                                Console.Write("Enter Destination:");
+                                string destination = Console.ReadLine()!;
+                                Console.Write("Enter Expected Departure / Arrival Time(dd / mm / yyyy hh: mm):");
+                                string time = Console.ReadLine()!.Trim().ToUpper();
+                                string expectedTime = Regex.Replace(time, @"\s*(AM|PM)\s*", " $1"); /////////////////////////////////////////////////
+                                DateTime parsedWithSpace = DateTime.ParseExact(expectedTime, "h:mm tt", CultureInfo.InvariantCulture);
+
+
+                                Console.Write("Enter Special Request Code");
+                                string specialRequestCode = Console.ReadLine()!;
+
+                                string filePath = "C:\\Users\\Samue\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+
+
+
+                                // Handle empty special request code
+                                if (string.IsNullOrWhiteSpace(specialRequestCode))
                                 {
-                                   if(flightNumber.Substring(0,2)== i.Value.Code)
+                                    specialRequestCode = "";  // Ensure empty value is added correctly in CSV
+                                }
+                                if (!code.Contains(specialRequestCode))
+                                {
+                                    Console.WriteLine("Invalid SpecialRequestCode");
+                                }
+                                else
+                                {
+                                    string newFlightEntry = $"{flightNumber},{origin},{destination},{expectedTime},{specialRequestCode}";
+                                    List<string> list = new List<string> { flightNumber, origin, destination, expectedTime, specialRequestCode };
+                                    foreach (var i in terminal.AirLines)
                                     {
-                                       FlightType(flightdata,i.Value,list);
+                                        if (flightNumber.Substring(0, 2) == i.Value.Code)
+                                        {
+                                            FlightType(flightdata, i.Value, list);
+                                        }
                                     }
+                                    // Prepare the flight record
+
+
+
+
+                                    // Append the new entry to the file
+                                    using (StreamWriter writer = new StreamWriter(filePath, append: true))
+                                    {
+                                        writer.WriteLine(newFlightEntry);
+                                    }
+
+
+                                    Console.WriteLine("Flight added successfully.");
+
+
+
+
+
+
+
                                 }
-                                // Prepare the flight record
-                               
-                                
-
-
-                                // Append the new entry to the file
-                                using (StreamWriter writer = new StreamWriter(filePath, append: true))
+                                Console.Write("Do you want add another flight ?");
+                                string ans = Console.ReadLine()!;
+                                if(ans == "Y")
                                 {
-                                    writer.WriteLine(newFlightEntry);
+                                    w = false;
                                 }
-
-
-                                Console.WriteLine("Flight added successfully.");
-
-
-
-
-
-
-
+                                else
+                                {
+                                    w= true;
+                                }
                             }
                         }
+
+
+
+
+                        else
+                        {
+                            Console.WriteLine("Invalid AirLine flight!");
+                            return;
+                        }
+
                     }
-
-
-
-
-                    else
-                    {
-                        Console.WriteLine("Invalid AirLine flight!");
-                        return;
-                    }
-                        
-                    } 
-                catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Console.WriteLine("invalid input " + ex);
                 }
 
@@ -601,47 +636,220 @@ namespace Assignment_PRG2
                
             }
 
+
+
+
+
+            // Advanced features
+            void BulkAssignBoardingGates(Dictionary<string, Flight> flights, Dictionary<string, BoardingGate> gates)
+            {
+                Queue<Flight> unassignedFlights = new Queue<Flight>();
+                int unassignedGatesCount = 0;
+
+
+                foreach (var flight in flights.Values)
+                {
+                    bool isAssigned = false;
+                    foreach (var gate in gates.Values)
+                    {
+                        if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber)
+                        {
+                            isAssigned = true;
+                            break;
+                        }
+                    }
+                    // check whether flight has assigned to the gate
+                    if (!isAssigned)
+                    {
+                        unassignedFlights.Enqueue(flight); // add the flight into queue 
+                    }
+                }
+
+
+                foreach (var gate in gates.Values)
+                {
+                    if (gate.Flight == null)
+                    {
+                        unassignedGatesCount++; // count number of unassigned flight in queue
+                    }
+                }
+
+                Console.WriteLine($"Total unassigned flights: {unassignedFlights.Count}");
+                Console.WriteLine($"Total unassigned gates: {unassignedGatesCount}");
+
+
+                while (unassignedFlights.Count > 0)
+                {
+                    Flight flight = unassignedFlights.Dequeue();               // get first items in queue
+                    bool gateAssigned = false;
+
+                    foreach (var gate in gates.Values)
+                    {                                                    
+                        if (gate.Flight == null)
+                        {  
+                            if (flight is CFFTFlight && gate.SupportsCFFT ||   // check requirement of gate 
+                                flight is DDJBFlight && gate.SupportsDDJB ||
+                                flight is LWTTFlight && gate.SupportsLWTT ||
+                                flight is NORMFlight && !gate.SupportsCFFT && !gate.SupportsDDJB && !gate.SupportsLWTT)
+                            {
+                                gate.Flight = flight;
+                                gateAssigned = true;
+                                Console.WriteLine($"Flight {flight.FlightNumber} assigned to Gate {gate.GetName}");
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!gateAssigned)
+                    {
+                        Console.WriteLine($"No available gate for Flight {flight.FlightNumber}");
+                    }
+                }
+
+                Console.WriteLine("Bulk assignment completed.");
+            }
+          
+            void CalculateDailyFees(Dictionary<string, AirLine> airlines, Dictionary<string, Flight> flights, Dictionary<string, BoardingGate> gates)
+            {
+             
+                foreach (var flight in flights.Values)
+                {
+                    bool isAssigned = false;
+                    foreach (var gate in gates.Values)
+                    {
+                        if (gate.Flight != null && gate.Flight.FlightNumber == flight.FlightNumber)
+                        {
+                            isAssigned = true;
+                            break;
+                        }
+                    }
+                    if (!isAssigned)
+                    {
+                        Console.WriteLine("Please assign boarding gates to all flights before calculating fees.");
+                        return;
+                    }
+                }
+
+              
+                foreach (var airline in airlines.Values)
+                {
+                    double totalFee = 0;
+                    double totalDiscount = 0;
+                    int flightCount = 0;
+
+                    foreach (var flight in airline.Flights.Values)
+                    {
+                       
+                        if (flight.Origin == "Singapore (SIN)")
+                        {
+                            totalFee += 800; 
+                        }
+                        else if (flight.Destination == "Singapore (SIN)")
+                        {
+                            totalFee += 500; 
+                        }
+
+                        if (flight is CFFTFlight)
+                        {
+                            totalFee += 150;
+                        }
+                        else if (flight is DDJBFlight)
+                        {
+                            totalFee += 300;
+                        }
+                        else if (flight is LWTTFlight)
+                        {
+                            totalFee += 500;
+                        }
+
+                        // 登机口基础费用
+                        totalFee += 300;
+
+                        flightCount++;
+                    }
+
+                    // 计算折扣
+                    if (flightCount >= 3)
+                    {
+                        totalDiscount += 350;
+                    }
+                    if (flightCount > 5)
+                    {
+                        totalDiscount += totalFee * 0.03;
+                    }
+
+                    // 显示每家航空公司的费用
+                    Console.WriteLine($"Airline: {airline.Name}");
+                    Console.WriteLine($"Total Fee: {totalFee}");
+                    Console.WriteLine($"Total Discount: {totalDiscount}");
+                    Console.WriteLine($"Final Fee: {totalFee - totalDiscount}");
+                    Console.WriteLine();
+                }
+            }
+            List<string> gatedata = new List<string>(File.ReadLines(gate));
+
+
+
+
+
+
+
+
             void Command(Dictionary<string, Flight> flight, Dictionary<string, BoardingGate> gate, Dictionary<string, AirLine> airline)
             {
                 while (true)
 
                 {
-                   
                     Menu();
 
-                    string answer = Console.ReadLine()!;
 
-                    switch (answer)
+                    string answer = Console.ReadLine()!.Trim();
+                    if (answer == "0")
                     {
-                        case "1":  // feature 3
+                        break;
+                    }
+                    else {
+                        
+                        switch (answer)
+                        {
+                            case "1":  // feature 3
 
 
-                            PrintFlight();
+                                PrintFlight();
 
-                            break;
-
-
-                        //feature 4 
-                        case "2":
-                            PrintGate();
-                            break;
+                                break;
 
 
-                        case "3":
-                            Assign();
-                            break;
-                        case "4":
-                            CreateFlight(flight,airdic);
-                            break;
-                        case "5":
-                            DisplayAirLine(airdic, flightdic,flightdata,gatedic);
-                            break;
-                        case "6":
-                            ModifyFlight(airdic,flightdic,flightdata,gatedic);
-                            break;
-                        case "7":
-                            Schedule(flightdic, gatedic, airdic);
-                            break;
+                            //feature 4 
+                            case "2":
+                                PrintGate();
+                                break;
+
+
+                            case "3":
+                                Assign();
+                                break;
+                            case "4":
+                                CreateFlight(flight, airdic,terminal5);
+                                break;
+                            case "5":
+                                DisplayAirLine(airdic, flightdic, flightdata, gatedic);
+                                break;
+                            case "6":
+                                ModifyFlight(airdic, flightdic, flightdata, gatedic);
+                                break;
+                            case "7":
+                                Schedule(flightdic, gatedic, airdic, flightdata);
+                                break;
+                            case "8":
+                                Console.WriteLine("sd");
+                                break;
+                            case "9":
+                                Console.WriteLine("sd");
+                                break;
+
+                        }
+                           
 
 
 
@@ -661,6 +869,8 @@ namespace Assignment_PRG2
             LoadGate();
             LoadFlight(airdic);
             LoadAirLine();
+            BulkAssignBoardingGates(flightdic, gatedic);
+            CalculateDailyFees(airdic, flightdic, gatedic);
             Command(flightdic, gatedic, airdic);
         }
     }
