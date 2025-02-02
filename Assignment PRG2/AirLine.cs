@@ -24,8 +24,8 @@ namespace Assignment_PRG2
         public bool AddFlight(Flight flights)
         {
             
-            Flights.Add(name, flights);
-            return false;
+            Flights.Add(flights.FlightNumber, flights);
+            return true;
         }
 
         public double CalculateFees()

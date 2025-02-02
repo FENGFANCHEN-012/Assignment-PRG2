@@ -44,9 +44,10 @@ namespace Assignment_PRG2
 
             void FlightType(List<string> flightdata, AirLine air, List<string> info)
             {
-                
-                string specialRequestCode = info[4]; 
+               
+                string specialRequestCode = info[4];
 
+              
                 if (specialRequestCode == "CFFT")
                 {
                     air.AddFlight(new CFFTFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), "On Time"));
@@ -518,125 +519,96 @@ namespace Assignment_PRG2
               
 
             }
-            void CreateFlight(Dictionary<string,Flight> flight, Dictionary<string,AirLine> airline,List<string> code)
+            void CreateFlight(Dictionary<string, Flight> flight, Dictionary<string, AirLine> airline,List<string>flightdata)
             {
                 try
-                { bool w = false;
+                {
+                    bool w = false;
                     while (!w)
                     {
                         Console.Write("Enter Flight Number:");
                         string flightNumber = Console.ReadLine()!.ToUpper();
-                        if (airline.ContainsKey(flightNumber.Substring(0, 2)))
+
+                        // check whether it is null
+                        if (string.IsNullOrWhiteSpace(flightNumber))
                         {
-
-
-                            if (flight.ContainsKey(flightNumber))
-                            {
-                                Console.WriteLine("This Flight Already Exists, Try Create Another one");
-                                return;
-                            }
-                            else
-
-                            {
-
-
-
-
-                                Console.Write("Enter Origin:");
-                                string origin = Console.ReadLine()!;
-                                Console.Write("Enter Destination:");
-                                string destination = Console.ReadLine()!;
-                                Console.Write("Enter Expected Departure / Arrival Time(dd / mm / yyyy hh: mm):");
-                                string time = Console.ReadLine()!.Trim().ToUpper();
-                                string expectedTime = Regex.Replace(time, @"\s*(AM|PM)\s*", " $1"); /////////////////////////////////////////////////
-                                DateTime parsedWithSpace = DateTime.ParseExact(expectedTime, "h:mm tt", CultureInfo.InvariantCulture);
-
-
-                                Console.Write("Enter Special Request Code");
-                                string specialRequestCode = Console.ReadLine()!;
-
-                                string filePath = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
-
-
-
-                                // Handle empty special request code
-                                if (string.IsNullOrWhiteSpace(specialRequestCode))
-                                {
-                                    specialRequestCode = "";  // Ensure empty value is added correctly in CSV
-                                }
-                                if (!code.Contains(specialRequestCode))
-                                {
-                                    Console.WriteLine("Invalid SpecialRequestCode");
-                                }
-                                else
-                                {
-                                    string newFlightEntry = $"{flightNumber},{origin},{destination},{expectedTime},{specialRequestCode}";
-                                    List<string> info = new List<string> { flightNumber, origin, destination, parsedWithSpace.ToString(), specialRequestCode };
-                                    foreach (var i in airline)
-                                    {
-                                        if (flightNumber.Substring(0, 2) == i.Value.Code)
-                                        {
-                                            FlightType(flightdata, i.Value, info);
-                                            break;
-                                        }
-                                    }
-                                    // Prepare the flight record
-
-
-
-
-                                    // Append the new entry to the file
-                                    using (StreamWriter writer = new StreamWriter(filePath, append: true))
-                                    {
-                                        writer.WriteLine(newFlightEntry);
-                                    }
-
-
-                                    Console.WriteLine("Flight added successfully.");
-
-
-
-
-
-
-
-                                }
-                                Console.Write("Do you want add another flight ?");
-                                string ans = Console.ReadLine()!;
-                                if(ans == "Y")
-                                {
-                                    w = false;
-                                }
-                                else
-                                {
-                                    w= true;
-                                }
-                            }
-                        }
-
-
-
-
-                        else
-                        {
-                            Console.WriteLine("Invalid AirLine flight!");
+                            Console.WriteLine("Flight number cannot be empty.");
                             return;
                         }
 
+                       
+                        if (!airline.ContainsKey(flightNumber.Substring(0, 2)))
+                        {
+                            Console.WriteLine("Invalid Airline code.");
+                            return;
+                        }
+
+                        if (flight.ContainsKey(flightNumber))
+                        {
+                            Console.WriteLine("This Flight Already Exists, Try Create Another one");
+                            return;
+                        }
+                        else
+                        {
+                            Console.Write("Enter Origin:");
+                            string origin = Console.ReadLine()!;
+                            Console.Write("Enter Destination:");
+                            string destination = Console.ReadLine()!;
+                            Console.Write("Enter Expected Departure / Arrival Time(dd / mm / yyyy hh: mm):");
+                            string time = Console.ReadLine()!.Trim().ToUpper();
+                            string expectedTime = Regex.Replace(time, @"\s*(AM|PM)\s*", " $1");
+                            DateTime parsedWithSpace = DateTime.ParseExact(expectedTime, "h:mm tt", CultureInfo.InvariantCulture);
+
+                            Console.Write("Enter Special Request Code:");
+                            string specialRequestCode = Console.ReadLine()!;
+
+                         
+                            if (string.IsNullOrWhiteSpace(specialRequestCode))
+                            {
+                                specialRequestCode = ""; 
+                            }
+
+                            if (!code.Contains(specialRequestCode))
+                            {
+                                Console.WriteLine("Invalid SpecialRequestCode");
+                            }
+                            else
+                            {
+                                List<string> info = new List<string> { flightNumber, origin, destination, expectedTime, specialRequestCode };
+
+                                foreach (var i in airline)
+                                {
+                                    if (flightNumber.Substring(0, 2) == i.Value.Code)
+                                    {
+                                        FlightType(flightdata, i.Value, info);
+                                        break;
+                                    }
+                                }
+
+                                string filePath = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+                                string newFlightEntry = $"{flightNumber},{origin},{destination},{parsedWithSpace},{specialRequestCode}";
+                                using (StreamWriter writer = new StreamWriter(filePath, append: true))
+                                {
+                                    writer.WriteLine(newFlightEntry);
+                                }
+
+                                Console.WriteLine("Flight added successfully.");
+                            }
+
+                            Console.Write("Do you want to add another flight? (Y/N):");
+                            string ans = Console.ReadLine()!;
+                            if (ans.ToUpper() != "Y")
+                            {
+                                w = true;
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("invalid input " + ex);
+                    Console.WriteLine("Invalid input: " + ex.Message+ ex.StackTrace);
                 }
-
-
-
-
-               
             }
-
-
 
 
 
@@ -829,7 +801,7 @@ namespace Assignment_PRG2
                                 Assign();
                                 break;
                             case "4":
-                                CreateFlight(flight, airdic,terminal5);
+                                CreateFlight(flight, airdic,flightdata);
                                 break;
                             case "5":
                                 DisplayAirLine(airdic, flightdic, flightdata, gatedic);

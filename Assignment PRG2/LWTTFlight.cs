@@ -24,7 +24,7 @@ namespace Assignment_PRG2
         }
         public override double CalculateFees()
         {
-            return 1;
+            
         }
         public override string ToString()
         {
