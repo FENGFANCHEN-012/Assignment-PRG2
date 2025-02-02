@@ -34,38 +34,37 @@ namespace Assignment_PRG2
             string airline = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\airlines.csv";
             string flight = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
             List<string> flightdata = new List<string>(File.ReadLines(flight));
+
+            List<string> gatedata = new List<string>(File.ReadLines(gate));
             List<string> airdata = new List<string>(File.ReadLines(airline));
 
             Terminal terminal5 = new Terminal("terminal5", airdic, flightdic, gatedic, fees);
 
 
-          
-           void  FlightType(List<string> flightdata,AirLine air,List<string> info)
+
+            void FlightType(List<string> flightdata, AirLine air, List<string> info)
             {
-                foreach (string i in flightdata) { 
+                
+                string specialRequestCode = info[4]; 
 
-                    List<string> data = new List<string>();
-                    if (data[4] == "CFFT")
-                    {
-                        air.AddFlight(new CFFTFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), info[4]));
-                    }
-                    else if (data[4] == "")
-                    {
-                        air.AddFlight(new NORMFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), info[4]));
-                    }
-                    else if (data[4] == "LWTT")
-                    {
-                        air.AddFlight(new LWTTFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), info[4]));
-
-                    }
-                    else if (data[4] == "DDJB")
-                    {
-                        air.AddFlight(new DDJBFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), info[4]));
-                    }
-                  
+                if (specialRequestCode == "CFFT")
+                {
+                    air.AddFlight(new CFFTFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), "On Time"));
+                }
+                else if (specialRequestCode == "")
+                {
+                    air.AddFlight(new NORMFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), "On Time"));
+                }
+                else if (specialRequestCode == "LWTT")
+                {
+                    air.AddFlight(new LWTTFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), "On Time"));
+                }
+                else if (specialRequestCode == "DDJB")
+                {
+                    air.AddFlight(new DDJBFlight(info[0], info[1], info[2], Convert.ToDateTime(info[3]), "On Time"));
                 }
             }
-            
+
             void PrintGate()
             {
                 Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
@@ -519,7 +518,7 @@ namespace Assignment_PRG2
               
 
             }
-            void CreateFlight(Dictionary<string,Flight> flight, Dictionary<string,AirLine> airline,Terminal terminal)
+            void CreateFlight(Dictionary<string,Flight> flight, Dictionary<string,AirLine> airline,List<string> code)
             {
                 try
                 { bool w = false;
@@ -531,7 +530,7 @@ namespace Assignment_PRG2
                         {
 
 
-                            if (terminal.Flights.ContainsKey(flightNumber))
+                            if (flight.ContainsKey(flightNumber))
                             {
                                 Console.WriteLine("This Flight Already Exists, Try Create Another one");
                                 return;
@@ -541,7 +540,7 @@ namespace Assignment_PRG2
                             {
 
 
-                                AirLine air = airline[flightNumber];
+
 
                                 Console.Write("Enter Origin:");
                                 string origin = Console.ReadLine()!;
@@ -556,7 +555,7 @@ namespace Assignment_PRG2
                                 Console.Write("Enter Special Request Code");
                                 string specialRequestCode = Console.ReadLine()!;
 
-                                string filePath = "C:\\Users\\Samue\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
+                                string filePath = "C:\\Users\\johny\\Desktop\\Assignment-PRG2\\Assignment PRG2\\data\\flights.csv";
 
 
 
@@ -572,12 +571,13 @@ namespace Assignment_PRG2
                                 else
                                 {
                                     string newFlightEntry = $"{flightNumber},{origin},{destination},{expectedTime},{specialRequestCode}";
-                                    List<string> list = new List<string> { flightNumber, origin, destination, expectedTime, specialRequestCode };
-                                    foreach (var i in terminal.AirLines)
+                                    List<string> info = new List<string> { flightNumber, origin, destination, parsedWithSpace.ToString(), specialRequestCode };
+                                    foreach (var i in airline)
                                     {
                                         if (flightNumber.Substring(0, 2) == i.Value.Code)
                                         {
-                                            FlightType(flightdata, i.Value, list);
+                                            FlightType(flightdata, i.Value, info);
+                                            break;
                                         }
                                     }
                                     // Prepare the flight record
@@ -786,8 +786,7 @@ namespace Assignment_PRG2
                     Console.WriteLine();
                 }
             }
-            List<string> gatedata = new List<string>(File.ReadLines(gate));
-
+        
 
 
 
