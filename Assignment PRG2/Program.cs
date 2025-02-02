@@ -77,8 +77,7 @@ namespace Assignment_PRG2
             }
            
             void PrintFlight()
-            {   
-                Console.WriteLine("=============================================\r\nList of Flights for Changi Airport Terminal 5\r\n=============================================");
+            {
                 Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
 
                 foreach (var i in flightdic)
