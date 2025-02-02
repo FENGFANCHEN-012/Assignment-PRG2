@@ -230,8 +230,7 @@ namespace Assignment_PRG2
                 Console.WriteLine("5. Display Airline Flights");
                 Console.WriteLine("6. Modify Flight Details");
                 Console.WriteLine("7. Display Flight Schedule");
-                Console.WriteLine("8. Assigned all Unassined Flight to gates");
-                Console.WriteLine("9. Caculated fees of each airlines corporation");
+                Console.WriteLine("8. Caculated fees of each airlines corporation");
                 Console.WriteLine("0. Exit");
                 Console.WriteLine("Please select your option:");
 
@@ -734,13 +733,13 @@ namespace Assignment_PRG2
                             totalFee += 500;
                         }
 
-                        // 登机口基础费用
+                        //  basic fee of flight
                         totalFee += 300;
 
                         flightCount++;
                     }
 
-                    // 计算折扣
+                    //  caculate discount
                     if (flightCount >= 3)
                     {
                         totalDiscount += 350;
@@ -750,7 +749,7 @@ namespace Assignment_PRG2
                         totalDiscount += totalFee * 0.03;
                     }
 
-                    // 显示每家航空公司的费用
+                    // show all fees
                     Console.WriteLine($"Airline: {airline.Name}");
                     Console.WriteLine($"Total Fee: {totalFee}");
                     Console.WriteLine($"Total Discount: {totalDiscount}");
@@ -813,12 +812,13 @@ namespace Assignment_PRG2
                                 Schedule(flightdic, gatedic, airdic, flightdata);
                                 break;
                             case "8":
-                                Console.WriteLine("sd");
+                                CalculateDailyFees(airdic, flightdic, gatedic);
                                 break;
-                            case "9":
-                                Console.WriteLine("sd");
-                                break;
+                         
 
+                            default:
+                                Console.WriteLine("Invalid option. Please try again.");
+                                break;
                         }
                            
 
@@ -841,7 +841,7 @@ namespace Assignment_PRG2
             LoadFlight(airdic);
             LoadAirLine();
             BulkAssignBoardingGates(flightdic, gatedic);
-            CalculateDailyFees(airdic, flightdic, gatedic);
+         
             Command(flightdic, gatedic, airdic);
         }
     }

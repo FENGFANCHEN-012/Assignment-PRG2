@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Assignment_PRG2
         }
         public override double CalculateFees()
         {
-            
+            return 1;
         }
         public override string ToString()
         {
