@@ -68,6 +68,7 @@ namespace Assignment_PRG2
 
             void PrintGate()
             {
+                Console.WriteLine("=============================================\r\nList of Boarding Gates for Changi Airport Terminal 5\r\n=============================================");
                 Console.WriteLine($"{"Gate NAME",-10}{"DDJB",-10}{"CFFT",-10}{"LWTT",-10}");
                 foreach (var x in gatedic.Values)
                 {
@@ -78,6 +79,7 @@ namespace Assignment_PRG2
            
             void PrintFlight()
             {
+                Console.WriteLine("=============================================\r\nList of Flights for Changi Airport Terminal 5\r\n=============================================");
                 Console.WriteLine($"{"Flight Number",-30}{"AirLine Name",-30}{"Origin",-27}{"destination",-30}{"Expected Arrival",-15}");
 
                 foreach (var i in flightdic)
@@ -241,6 +243,7 @@ namespace Assignment_PRG2
 
                 try
                 {
+                    Console.WriteLine("=============================================\r\nAssign a Boarding Gate to a Flight\r\n=============================================");
                     Console.WriteLine("Enter Flight Number:");
                     string flightnum = Console.ReadLine()!.Trim();
                     Console.WriteLine("Enter Boarding Gate Name:");
